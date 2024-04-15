@@ -50,8 +50,8 @@ function is-terminal-active() {
 function zsh-notify() {
     local message title time_elapsed type app_id app_id_option sound_option
 
-    if ! command -v terminal-notifier > /dev/null 2>&1; then
-        echo cannot find terminal-notifier in \$PATH 1>&2
+    if ! command -v notify.sh > /dev/null 2>&1; then
+        echo cannot find notify.sh in \$PATH 1>&2
         return 1
     fi
 
@@ -90,8 +90,9 @@ function zsh-notify() {
         icon_option="-contentImage $icon"
     fi
 
-    terminal-notifier ${=app_id_option} ${=sound_option} ${=icon_option} \
-        -title "${title}" <<< "$message" > /dev/null 2>&1 &!
+    # echo "Title: $title"
+    # echo "Message: $message"
+    notify.sh ${=sound_option} -t "${title}" <<< "$message"
 
     if zstyle -t ':notify:' activate-terminal; then
         osascript <<< "tell app id \"$app_id\" to activate" 1>/dev/null
